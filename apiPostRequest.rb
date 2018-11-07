@@ -3,39 +3,29 @@ require 'net/https'
 require 'uri'
 require 'json'
 
-uri = URI.parse("https://coltest.ekmmetering.com/setMeter?meter=66&key=ZGZsMjZhRTJWVDo2NTI0MDkxMQ")
+def change_ct_ratio(key, meter, ct_ratio)
+  uri = URI.parse("https://coltest.ekmmetering.com/setMeter?meter=66&key=ZGZsMjZhRTJWVDo2NTI0MDkxMQ")
 
-# header = {'Content-Type': 'application/json'}
+  https = Net::HTTP.new(uri.host, uri.port)
+  https.use_ssl = true
 
-body = {
-  "Command": "CTRatioSet",
-  "Settings": [
-    {
-      "CTRatioSet": {
-        "Access_Password": "00000000",
-        "CT_Ratio": 800
+  req = Net::HTTP::Post.new(uri.path.concat("?meter=#{meter}&key=#{key}"))
+  req['Content-Type'] = 'application/json'
+
+  req.body = {
+    "Command": "CTRatioSet",
+    "Settings": [
+      {
+        "CTRatioSet": {
+          "Access_Password": "00000000",
+          "CT_Ratio": ct_ratio
+        }
       }
-    }
-  ]
-}
+    ]
+  }.to_json
 
-https = Net::HTTP.new(uri.host, uri.port)
-https.use_ssl = true
+  res = https.request(req)
+  p res
+end
 
-req = Net::HTTP::Post.new(uri.path.concat("?meter=66&key=ZGZsMjZhRTJWVDo2NTI0MDkxMQ"))
-req['Content-Type'] = 'application/json'
-# req['charset'] = 'UTF-8'
-req.body = {
-  "Command": "CTRatioSet",
-  "Settings": [
-    {
-      "CTRatioSet": {
-        "Access_Password": "00000000",
-        "CT_Ratio": 800
-      }
-    }
-  ]
-}.to_json
-res = https.request(req)
-
-p res
+change_ct_ratio("ZGZsMjZhRTJWVDo2NTI0MDkxMQ", 66, 600)
