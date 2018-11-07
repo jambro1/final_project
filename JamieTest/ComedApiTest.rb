@@ -20,15 +20,17 @@ time = Time.now
 full_time = "#{time.year}#{'%02d' % time.month}#{'%02d' % time.day}#{'%02d' % time.hour}#{ '%02d' % time.min}"
 
 api_object = call_api('/api?type=5minutefeed')
- api_object_time = call_api("/api?type=5minutefeed&datestart=#{full_time.to_i - 20000}&dateend=#{full_time.to_i}")
+ api_object_time = call_api("/api?type=5minutefeed&datestart=#{d.strftime('%Y%m%d%H%M').to_i - 20000}&dateend=#{full_time.to_i}")
 
 # This just displays the object but you can use what ever
 # code you would like to work with the object here
 
-puts Time.now
-puts Time.now.to_i
+# puts Time.now.to_i
 
-puts full_time.to_i
+# puts full_time.to_i
+
+d = Time.now
+puts(d.strftime('%Y%m%d%H%M'))
 
 latest_read = api_object_time[0]
 
