@@ -1,42 +1,29 @@
 require 'net/http'
 require 'json'
 require 'pp'
+require 'date'
 
 # Call the callApi method to create a usable
 # object named apiObject from the API request URI
 # Put the API request URI in the call
-def call_api(api_request)
-  json = Net::HTTP.get('hourlypricing.comed.com', api_request)
-  JSON.parse(json)
+def get_comed_data(starttime, endtime = Time.now.utc.strftime('%Y%m%d%H%M'))
+  api_string = "/api?type=5minutefeed&datestart=#{starttime}&dateend=#{endtime}"
+  json = Net::HTTP.get('hourlypricing.comed.com', api_string)
+  return JSON.parse(json)
 end
 
-# Call the callApi method to create a usable
-# object named apiObject from the API request URI
-# Put the API request URI in the call
-# URI only NOT URL - Do not include http://io.ekmpush.com
+def api_date(minutesbackwards)
+  time_now = Time.now.utc - (minutesbackwards * 60)
+  return time_now.strftime('%Y%m%d%H%M')
+end
 
-time = Time.now
+def convertToUTCMilli(strftime)
+  unless strftime.zero?
+    time = (strftime.to_i / 1000).to_s
+    return DateTime.strptime(time, '%s')
+  end
+end
 
-full_time = "#{time.year}#{'%02d' % time.month}#{'%02d' % time.day}#{'%02d' % time.hour}#{ '%02d' % time.min}"
 
-api_object = call_api('/api?type=5minutefeed')
- api_object_time = call_api("/api?type=5minutefeed&datestart=#{d.strftime('%Y%m%d%H%M').to_i - 20000}&dateend=#{full_time.to_i}")
-
-# This just displays the object but you can use what ever
-# code you would like to work with the object here
-
-# puts Time.now.to_i
-
-# puts full_time.to_i
-
-d = Time.now
-puts(d.strftime('%Y%m%d%H%M'))
-
-latest_read = api_object_time[0]
-
-puts "Time from Comed: #{latest_read['millisUTC']}"
-puts "Price from Comed: #{latest_read['price']}"
-
-puts latest_read
-
-# puts api_object[1]
+api_object_time = get_comed_data(api_date(30))
+puts api_object_time
