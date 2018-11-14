@@ -3,7 +3,7 @@ require 'net/https'
 require 'uri'
 require 'json'
 
-def change_ekm_relay(key, meter, seconds)
+def change_ekm_relay(key, meter, relay_number, args)
   uri = URI.parse('https://coltest.ekmmetering.com/setMeter?meter=66&key=ZGZsMjZhRTJWVDo2NTI0MDkxMQ')
 
   https = Net::HTTP.new(uri.host, uri.port)
@@ -18,9 +18,9 @@ def change_ekm_relay(key, meter, seconds)
       {
         'RelayDurationSet': {
           'Access_Password': '00000000',
-          'Relay': 'Relay_1',
-          'Duration': seconds,
-          'Status': 'closed'
+          'Relay': "Relay_#{relay_number}",
+          'Duration': args[:seconds],
+          'Status': args[:state]
         }
       }
     ]
@@ -31,10 +31,17 @@ def change_ekm_relay(key, meter, seconds)
 end
 
 # California:
-# change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 66, 0)
+#change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 66, "Relay_1", 0)
 
 # Berlin:
-change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 350001437, 5)
+perm_on = {state: "closed", seconds: 0}
+perm_off = {state: "open", seconds: 0}
+temp_on = {state: "closed", seconds: 3}
+temp_off = {state: "closed", seconds: 3}
+
+change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 350001437, 2, perm_on)
+sleep(2)
+change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 350001437, 2, temp_off)
 
 # set time to 0 if you want it to take affect forever
 # change Status: to open if you want to open the relay (OFF), set to closed to close it (ON).
