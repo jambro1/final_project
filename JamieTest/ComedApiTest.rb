@@ -3,9 +3,6 @@ require 'json'
 require 'pp'
 require 'date'
 
-# Call the callApi method to create a usable
-# object named apiObject from the API request URI
-# Put the API request URI in the call
 def get_comed_data(starttime, endtime = Time.now.utc.strftime('%Y%m%d%H%M'))
   api_string = "/api?type=5minutefeed&datestart=#{starttime}&dateend=#{endtime}"
   json = Net::HTTP.get('hourlypricing.comed.com', api_string)
@@ -23,7 +20,6 @@ def convertToUTCMilli(strftime)
     return DateTime.strptime(time, '%s')
   end
 end
-
 
 api_object_time = get_comed_data(api_date(30))
 puts api_object_time
