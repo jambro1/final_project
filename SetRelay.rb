@@ -30,7 +30,11 @@ def change_ekm_relay(key, meter, seconds)
   p res
 end
 
-change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 66, 0)
+# California:
+# change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 66, 0)
+
+# Berlin:
+change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 350001437, 5)
 
 # set time to 0 if you want it to take affect forever
 # change Status: to open if you want to open the relay (OFF), set to closed to close it (ON).
