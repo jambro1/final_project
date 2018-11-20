@@ -30,10 +30,19 @@ def change_ekm_relay(key, meter, relay_number, args)
   p res
 end
 
+# perm_on = {state: "closed", seconds: 0}
+
+perm_on = "closed",0
+
+p perm_on.to_s
+
 # California:
 #change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 66, "Relay_1", 0)
 
 # Berlin:
+
+
+=======
 perm_on = {state: "closed", seconds: 0}
 perm_off = {state: "open", seconds: 0}
 temp_on = {state: "closed", seconds: 3}
@@ -42,6 +51,7 @@ temp_off = {state: "closed", seconds: 3}
 change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 350001437, 2, perm_on)
 sleep(2)
 change_ekm_relay('ZGZsMjZhRTJWVDo2NTI0MDkxMQ', 350001437, 2, temp_off)
+
 
 # set time to 0 if you want it to take affect forever
 # change Status: to open if you want to open the relay (OFF), set to closed to close it (ON).
